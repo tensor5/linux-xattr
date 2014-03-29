@@ -1,12 +1,11 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-{- |XAttr provides bindings to the glibc functions for reading and
-manipulating extended attributes (@setxattr@, @getxattr@, @listxattr@,
-...).  Each function in this module has two variants: the one with the
-name prefixed by \"l\" and \"fd\".  Both of these are identical to the
-original version except that the \"l\"-variant does not follow
-symbolic link but acts on the link itself, and the \"fd\"-variant take
-a file descriptor as argument rather than a @'FilePath'@.  -}
+{- |XAttr provides bindings to the glibc functions for reading and manipulating
+extended attributes (@setxattr@, @getxattr@, @listxattr@, ...).  Each function
+in this module has two variants: the one with the name prefixed by \"l\" and
+\"fd\".  Both of these are identical to the original version except that the
+\"l\"-variant does not follow symbolic link but acts on the link itself, and the
+\"fd\"-variant take a file descriptor as argument rather than a @'FilePath'@.-}
 
 module System.Linux.XAttr
     ( -- * Set extended attributes
@@ -37,12 +36,14 @@ module System.Linux.XAttr
 
 #include <sys/xattr.h>
 
-import Data.ByteString (ByteString, packCStringLen, useAsCStringLen)
-import Foreign.C ( CInt(..), CSize(..), CString, peekCStringLen
-                 , throwErrnoIfMinus1, throwErrnoIfMinus1_, withCString)
-import Foreign.Ptr (Ptr, castPtr, nullPtr)
-import Foreign.Marshal (allocaBytes)
-import System.Posix.Types (CSsize(..), Fd(..))
+import           Data.ByteString    (ByteString, packCStringLen,
+                                     useAsCStringLen)
+import           Foreign.C          (CInt (..), CSize (..), CString,
+                                     peekCStringLen, throwErrnoIfMinus1,
+                                     throwErrnoIfMinus1_, withCString)
+import           Foreign.Marshal    (allocaBytes)
+import           Foreign.Ptr        (Ptr, castPtr, nullPtr)
+import           System.Posix.Types (CSsize (..), Fd (..))
 
 xAttrSet :: String
          -> ByteString
@@ -64,8 +65,7 @@ setXAttr :: FilePath    -- ^ target file
 setXAttr path attr value =
     withCString path $ xAttrSet attr value c_setxattr "setxattr" 0
 
--- | Set the value of an extended attribute (do not follow symbolic
--- links).
+-- | Set the value of an extended attribute (do not follow symbolic links).
 lSetXAttr :: FilePath -> String -> ByteString -> IO ()
 lSetXAttr path attr value =
     withCString path $ xAttrSet attr value c_lsetxattr "lsetxattr" 0
@@ -75,42 +75,42 @@ fdSetXAttr :: Fd -> String -> ByteString -> IO ()
 fdSetXAttr (Fd n) attr value =
     xAttrSet attr value c_fsetxattr "fsetxattr" 0 n
 
--- | Identical to @'setXAttr'@, but if the attribute already exists
--- fail and set errno to EEXIST.
+-- | Identical to @'setXAttr'@, but if the attribute already exists fail and set
+-- errno to EEXIST.
 createXAttr :: FilePath -> String -> ByteString -> IO ()
 createXAttr path attr value =
     withCString path $
     xAttrSet attr value c_setxattr "setxattr" #{const XATTR_CREATE}
 
--- | Identical to @'lSetXAttr'@, but if the attribute already exists
--- fail and set errno to EEXIST.
+-- | Identical to @'lSetXAttr'@, but if the attribute already exists fail and
+-- set errno to EEXIST.
 lCreateXAttr :: FilePath -> String -> ByteString -> IO ()
 lCreateXAttr path attr value =
     withCString path $
     xAttrSet attr value c_lsetxattr "lsetxattr" #{const XATTR_CREATE}
 
--- | Identical to @'fdSetXAttr'@, but if the attribute already exists
--- fail and set errno to EEXIST.
+-- | Identical to @'fdSetXAttr'@, but if the attribute already exists fail and
+-- set errno to EEXIST.
 fdCreateXAttr :: Fd -> String -> ByteString -> IO ()
 fdCreateXAttr (Fd n) attr value =
     xAttrSet attr value c_fsetxattr "fsetxattr" #{const XATTR_CREATE} n
 
--- | Identical to @'setXAttr'@, but if the attribute does not exist
--- fail and set errno to ENOATTR.
+-- | Identical to @'setXAttr'@, but if the attribute does not exist fail and set
+-- errno to ENOATTR.
 replaceXAttr :: FilePath -> String -> ByteString -> IO ()
 replaceXAttr path attr value =
     withCString path $
     xAttrSet attr value c_setxattr "setxattr" #{const XATTR_REPLACE}
 
--- | Identical to @'lSetXAttr'@, but if the attribute does not exist
--- fail and set errno to ENOATTR.
+-- | Identical to @'lSetXAttr'@, but if the attribute does not exist fail and
+-- set errno to ENOATTR.
 lReplaceXAttr :: FilePath -> String -> ByteString -> IO ()
 lReplaceXAttr path attr value =
     withCString path $
     xAttrSet attr value c_lsetxattr "lsetxattr" #{const XATTR_REPLACE}
 
--- | Identical to @'fdSetXAttr'@, but if the attribute does not exist
--- fail and set errno to ENOATTR.
+-- | Identical to @'fdSetXAttr'@, but if the attribute does not exist fail and
+-- set errno to ENOATTR.
 fdReplaceXAttr :: Fd -> String -> ByteString -> IO ()
 fdReplaceXAttr (Fd n) attr value =
     xAttrSet attr value c_fsetxattr "fsetxattr" #{const XATTR_REPLACE} n
@@ -129,14 +129,13 @@ xAttrGet attr func name f =
                   packCStringLen (castPtr p, fromIntegral size)
 
 -- | Get the value of an extended attribute.
-getXAttr :: FilePath     -- ^ target file
-         -> String       -- ^ name of the attribute
+getXAttr :: FilePath       -- ^ target file
+         -> String         -- ^ name of the attribute
          -> IO ByteString  -- ^ value of the attribute
 getXAttr path attr =
     withCString path $ xAttrGet attr c_getxattr "getxattr"
 
--- | Get the value of an extended attribute (do not follow symbolic
--- links).
+-- | Get the value of an extended attribute (do not follow symbolic links).
 lGetXAttr :: FilePath -> String -> IO ByteString
 lGetXAttr path attr =
     withCString path $ xAttrGet attr c_lgetxattr "lgetxattr"
@@ -161,20 +160,18 @@ xAttrList func name f =
           split xs = fst c : split (tail $ snd c)
               where c = break (== '\NUL') xs
 
--- | Get the list of attribute names associated with the given
--- @'FilePath'@.
+-- | Get the list of attribute names associated with the given @'FilePath'@.
 listXAttr :: FilePath      -- ^ target file
           -> IO [String] -- ^ list of attribute names
 listXAttr path = withCString path $ xAttrList c_listxattr "listxattr"
 
--- | Get the list of attribute names associated with the given
--- @'FilePath'@ (do not follow symbolic links).
+-- | Get the list of attribute names associated with the given @'FilePath'@ (do
+-- not follow symbolic links).
 lListXAttr :: FilePath -> IO [String]
 lListXAttr path =
     withCString path $ xAttrList c_llistxattr "llistxattr"
 
--- | Get the list of attribute names associated with the given file
--- descriptor.
+-- | Get the list of attribute names associated with the given file descriptor.
 fdListXAttr :: Fd -> IO [String]
 fdListXAttr (Fd n) =
     xAttrList c_flistxattr "flistxattr" n
@@ -185,8 +182,8 @@ xAttrRemove attr func name f =
     throwErrnoIfMinus1_ name $ withCString attr (func f)
 
 -- | Remove an extended attribute from the given @'FilePath'@.
-removeXAttr :: FilePath -- ^ target file
-            -> String   -- ^ name of the attribute
+removeXAttr :: FilePath  -- ^ target file
+            -> String    -- ^ name of the attribute
             -> IO ()
 removeXAttr path attr =
     withCString path $ xAttrRemove attr c_removexattr "removexattr"
