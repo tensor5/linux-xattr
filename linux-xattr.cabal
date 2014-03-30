@@ -12,9 +12,8 @@ Synopsis:       Read, set and list extended attributes
 Category:       System
 Description:
 
-  XAttr provides bindings to the glibc functions for reading and
-  manipulating extended attributes (@setxattr@, @getxattr@,
-  @listxattr@, ...).
+  Bindings to the Linux syscalls for reading and manipulating extended
+  attributes (@setxattr@, @getxattr@, @listxattr@, ...).
 
 Library
   Build-Depends:        base == 4.*,
