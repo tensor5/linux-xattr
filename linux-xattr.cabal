@@ -7,7 +7,8 @@ License-File:   LICENSE
 Copyright:      © 2013-2014 Nicola Squartini
 Author:         Nicola Squartini
 Maintainer:     Nicola Squartini <tensor5@gmail.com>
-Bug-Reports:    mailto:tensor5@gmail.com
+Homepage:       https://github.com/tensor5/linux-xattr
+Bug-Reports:    https://github.com/tensor5/linux-xattr/issues
 Synopsis:       Read, set and list extended attributes
 Category:       System
 Description:
@@ -18,6 +19,15 @@ Description:
 Extra-Source-Files:
   CHANGELOG.md
   README.md
+
+Source-Repository head
+  Type:      git
+  Location:  git://github.com/tensor5/linux-xattr.git
+
+Source-Repository this
+  Type:      git
+  Location:  git://github.com/tensor5/linux-xattr.git
+  Tag:       v0.1.0.1
 
 Library
   Build-Depends:        base == 4.*,
