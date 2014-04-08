@@ -15,6 +15,10 @@ Description:
   Bindings to the Linux syscalls for reading and manipulating extended
   attributes (@setxattr@, @getxattr@, @listxattr@, ...).
 
+Extra-Source-Files:
+  CHANGELOG.md
+  README.md
+
 Library
   Build-Depends:        base == 4.*,
                         bytestring == 0.10.*
