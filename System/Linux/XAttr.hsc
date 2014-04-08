@@ -1,11 +1,24 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-{- |XAttr provides bindings to the glibc functions for reading and manipulating
-extended attributes (@setxattr@, @getxattr@, @listxattr@, ...).  Each function
-in this module has two variants: the one with the name prefixed by \"l\" and
-\"fd\".  Both of these are identical to the original version except that the
-\"l\"-variant does not follow symbolic link but acts on the link itself, and the
-\"fd\"-variant take a file descriptor as argument rather than a @'FilePath'@.-}
+--------------------------------------------------------------------------------
+-- |
+-- Module      :  $Header$
+-- Copyright   :  © 2013-2014 Nicola Squartini
+-- License     :  BSD3
+--
+-- Maintainer  :  Nicola Squartini <tensor5@gmail.com>
+-- Stability   :  experimental
+-- Portability :  portable
+--
+-- @linux-xattr@ provides bindings to the Linux syscalls for reading and
+-- manipulating extended attributes (@setxattr@, @getxattr@, @listxattr@, ...).
+-- Each function in this module has two variants: one with the name prefixed by
+-- \"l\" and one prefixed by \"fd\".  Both of these are identical to the
+-- original version except that the \"l\"-variant does not follow symbolic link
+-- but acts on the link itself, and the \"fd\"-variant take a file descriptor as
+-- argument rather than a @'FilePath'@.
+--
+--------------------------------------------------------------------------------
 
 module System.Linux.XAttr
     ( -- * Set extended attributes
