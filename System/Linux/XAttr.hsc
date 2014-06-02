@@ -54,11 +54,11 @@ module System.Linux.XAttr
 
 import           Data.ByteString       (ByteString, packCStringLen,
                                         useAsCStringLen)
-import           Foreign.C             (CInt (..), CSize (..), CString,
+import           Foreign.C             (CChar, CInt (..), CSize (..), CString,
                                         peekCStringLen, throwErrnoIfMinus1,
                                         throwErrnoIfMinus1_, withCString)
 import           Foreign.Marshal.Alloc (allocaBytes)
-import           Foreign.Ptr           (Ptr, castPtr, nullPtr)
+import           Foreign.Ptr           (Ptr, nullPtr)
 import           System.Posix.Types    (CSsize (..), Fd (..))
 
 -- | Name of extended attribute.
@@ -69,7 +69,7 @@ type Value = ByteString
 
 xAttrSet :: Name
          -> Value
-         -> (a -> CString -> Ptr () -> CSize -> CInt -> IO CInt)
+         -> (a -> CString -> Ptr CChar -> CSize -> CInt -> IO CInt)
          -> String
          -> CInt
          -> a
@@ -77,7 +77,7 @@ xAttrSet :: Name
 xAttrSet attr value func name mode f =
     throwErrnoIfMinus1_ name $ withCString attr $ \b ->
         useAsCStringLen value $ \(c,d) ->
-            func f b (castPtr c) (fromIntegral d) mode
+            func f b c (fromIntegral d) mode
 
 -- | Set the @'Value'@ of the extended attribute identified by @'Name'@ and
 -- associated with the given @'FilePath'@ in the filesystem.
@@ -140,7 +140,7 @@ fdReplaceXAttr (Fd n) attr value =
 
 
 xAttrGet :: Name
-         -> (a -> CString -> Ptr () -> CSize -> IO CSsize)
+         -> (a -> CString -> Ptr CChar -> CSize -> IO CSsize)
          -> String
          -> a
          -> IO Value
@@ -149,7 +149,7 @@ xAttrGet attr func name f =
         do size <- throwErrnoIfMinus1 name (func f cstr nullPtr 0)
            allocaBytes (fromIntegral size) $ \p ->
                do throwErrnoIfMinus1_ name $ func f cstr p (fromIntegral size)
-                  packCStringLen (castPtr p, fromIntegral size)
+                  packCStringLen (p, fromIntegral size)
 
 -- | Get the @'Value'@ of the extended attribute identified by @'Name'@ and
 -- associated with the given @'FilePath'@ in the filesystem, or fail with
@@ -235,21 +235,21 @@ fdRemoveXAttr (Fd n) attr =
 
 foreign import ccall unsafe setxattr :: CString
                                      -> CString
-                                     -> Ptr ()
+                                     -> Ptr a
                                      -> CSize
                                      -> CInt
                                      -> IO CInt
 
 foreign import ccall unsafe lsetxattr :: CString
                                       -> CString
-                                      -> Ptr ()
+                                      -> Ptr a
                                       -> CSize
                                       -> CInt
                                       -> IO CInt
 
 foreign import ccall unsafe fsetxattr :: CInt
                                       -> CString
-                                      -> Ptr ()
+                                      -> Ptr a
                                       -> CSize
                                       -> CInt
                                       -> IO CInt
@@ -257,19 +257,19 @@ foreign import ccall unsafe fsetxattr :: CInt
 
 foreign import ccall unsafe getxattr :: CString
                                      -> CString
-                                     -> Ptr ()
+                                     -> Ptr a
                                      -> CSize
                                      -> IO CSsize
 
 foreign import ccall unsafe lgetxattr :: CString
                                       -> CString
-                                      -> Ptr ()
+                                      -> Ptr a
                                       -> CSize
                                       -> IO CSsize
 
 foreign import ccall unsafe fgetxattr :: CInt
                                       -> CString
-                                      -> Ptr ()
+                                      -> Ptr a
                                       -> CSize
                                       -> IO CSsize
 
