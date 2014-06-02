@@ -1,3 +1,5 @@
+{-# LANGUAGE Safe #-}
+
 --------------------------------------------------------------------------------
 -- |
 -- Module      :  $Header$
@@ -50,14 +52,14 @@ module System.Linux.XAttr
 
 #include <sys/xattr.h>
 
-import           Data.ByteString    (ByteString, packCStringLen,
-                                     useAsCStringLen)
-import           Foreign.C          (CInt (..), CSize (..), CString,
-                                     peekCStringLen, throwErrnoIfMinus1,
-                                     throwErrnoIfMinus1_, withCString)
-import           Foreign.Marshal    (allocaBytes)
-import           Foreign.Ptr        (Ptr, castPtr, nullPtr)
-import           System.Posix.Types (CSsize (..), Fd (..))
+import           Data.ByteString       (ByteString, packCStringLen,
+                                        useAsCStringLen)
+import           Foreign.C             (CInt (..), CSize (..), CString,
+                                        peekCStringLen, throwErrnoIfMinus1,
+                                        throwErrnoIfMinus1_, withCString)
+import           Foreign.Marshal.Alloc (allocaBytes)
+import           Foreign.Ptr           (Ptr, castPtr, nullPtr)
+import           System.Posix.Types    (CSsize (..), Fd (..))
 
 -- | Name of extended attribute.
 type Name = String
