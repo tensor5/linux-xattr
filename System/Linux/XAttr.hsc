@@ -50,7 +50,7 @@ module System.Linux.XAttr
       -- * Types for extended attributes
     , Name
     , Value
-      ) where
+    ) where
 
 #include <sys/xattr.h>
 
