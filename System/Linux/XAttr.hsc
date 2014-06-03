@@ -9,7 +9,11 @@
 -- Portability :  portable
 --
 -- @linux-xattr@ provides bindings to the Linux syscalls for reading and
--- manipulating extended attributes (@setxattr@, @getxattr@, @listxattr@, ...).
+-- manipulating extended attributes
+-- (@<http://man7.org/linux/man-pages/man2/setxattr.2.html setxattr>@,
+-- @<http://man7.org/linux/man-pages/man2/getxattr.2.html getxattr>@,
+-- @<http://man7.org/linux/man-pages/man2/listxattr.2.html listxattr>@ and
+-- @<http://man7.org/linux/man-pages/man2/removexattr.2.html removexattr>@).
 -- Each function in this module has two variants: one with the name prefixed by
 -- \"l\" and one prefixed by \"fd\".  Both of these are identical to the
 -- original version except that the \"l\"-variant does not follow symbolic link
