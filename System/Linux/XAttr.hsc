@@ -52,7 +52,7 @@ module System.Linux.XAttr
 
 import           Data.ByteString       (ByteString, packCStringLen,
                                         useAsCStringLen)
-import           Foreign.C             (CChar, CInt (..), CSize (..), CString,
+import           Foreign.C             (CInt (..), CSize (..), CString,
                                         peekCStringLen, throwErrnoIfMinus1,
                                         throwErrnoIfMinus1_, withCString)
 import           Foreign.Marshal.Alloc (allocaBytes)
@@ -67,7 +67,7 @@ type Value = ByteString
 
 xAttrSet :: Name
          -> Value
-         -> (a -> CString -> Ptr CChar -> CSize -> CInt -> IO CInt)
+         -> (a -> CString -> CString -> CSize -> CInt -> IO CInt)
          -> String
          -> CInt
          -> a
@@ -138,7 +138,7 @@ fdReplaceXAttr (Fd n) attr value =
 
 
 xAttrGet :: Name
-         -> (a -> CString -> Ptr CChar -> CSize -> IO CSsize)
+         -> (a -> CString -> CString -> CSize -> IO CSsize)
          -> String
          -> a
          -> IO Value
