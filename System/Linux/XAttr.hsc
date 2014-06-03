@@ -24,30 +24,67 @@
 
 module System.Linux.XAttr
     ( -- * Set extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/setxattr.2.html setxattr>@
+      -- syscall.
+
       setXAttr
     , lSetXAttr
     , fdSetXAttr
+
       -- * Create extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/setxattr.2.html setxattr>@
+      -- syscall with the flag @XATTR_CREATE@.
+
     , createXAttr
     , lCreateXAttr
     , fdCreateXAttr
+
       -- * Replace extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/setxattr.2.html setxattr>@
+      -- syscall with the flag @XATTR_REPLACE@.
+
     , replaceXAttr
     , lReplaceXAttr
     , fdReplaceXAttr
+
       -- * Retrive extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/getxattr.2.html getxattr>@
+      -- syscall.
+
     , getXAttr
     , lGetXAttr
     , fdGetXAttr
+
       -- * List extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/listxattr.2.html listxattr>@
+      -- syscall.
+
     , listXAttr
     , lListXAttr
     , fdListXAttr
+
       -- * Remove extended attributes
+
+      -- | Functions in this section call the
+      -- @<http://man7.org/linux/man-pages/man2/removexattr.2.html removexattr>@
+      -- syscall.
+
     , removeXAttr
     , lRemoveXAttr
     , fdRemoveXAttr
+
       -- * Types for extended attributes
+
     , Name
     , Value
     ) where
