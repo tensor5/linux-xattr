@@ -9,16 +9,18 @@
 -- Portability :  portable
 --
 -- @linux-xattr@ provides bindings to the Linux syscalls for reading and
--- manipulating extended attributes
+-- manipulating
+-- <http://en.wikipedia.org/wiki/Extended_file_attributes extended attributes>
 -- (@<http://man7.org/linux/man-pages/man2/setxattr.2.html setxattr>@,
 -- @<http://man7.org/linux/man-pages/man2/getxattr.2.html getxattr>@,
 -- @<http://man7.org/linux/man-pages/man2/listxattr.2.html listxattr>@ and
 -- @<http://man7.org/linux/man-pages/man2/removexattr.2.html removexattr>@).
+--
 -- Each function in this module has two variants: one with the name prefixed by
--- \"l\" and one prefixed by \"fd\".  Both of these are identical to the
--- original version except that the \"l\"-variant does not follow symbolic link
--- but acts on the link itself, and the \"fd\"-variant take a file descriptor as
--- argument rather than a @'FilePath'@.
+-- @__l__@ and one prefixed by @__fd__@.  Both of these are identical to the
+-- original version except that the @__l__@-variant does not follow symbolic
+-- link but acts on the link itself, and the @__fd__@-variant take a file
+-- descriptor as argument rather than a @'FilePath'@.
 --
 -- Moreover, every function has an @/xxx/__UserXAttr__@ variant for working
 -- transparently in the @__user__@ namespace of extended attributes, without
@@ -79,7 +81,7 @@ module System.Linux.XAttr
     , lReplaceUserXAttr
     , fdReplaceUserXAttr
 
-      -- * Retrive extended attributes
+      -- * Retrieve extended attributes
 
       -- | Functions in this section call the
       -- @<http://man7.org/linux/man-pages/man2/getxattr.2.html getxattr>@
@@ -275,7 +277,7 @@ xAttrGet attr func name f =
                do throwErrnoIfMinus1_ name $ func f cstr p (fromIntegral size)
                   packCStringLen (p, fromIntegral size)
 
--- | Get the @'Value'@ of the extended attribute identified by @'Name'@ and
+-- | Retrieve the @'Value'@ of the extended attribute identified by @'Name'@ and
 -- associated with the given @'FilePath'@ in the filesystem, or fail with
 -- @`System.IO.Error.isDoesNotExistError`@ if the attribute does not exist.
 getXAttr :: FilePath -> Name -> IO Value
@@ -286,7 +288,7 @@ getXAttr path attr =
 getUserXAttr :: FilePath -> Name -> IO Value
 getUserXAttr = userXAttr getXAttr
 
--- | Get the @'Value'@ of the extended attribute identified by @'Name'@ and
+-- | Retrieve the @'Value'@ of the extended attribute identified by @'Name'@ and
 -- associated with the given @'FilePath'@ in the filesystem, or fail with
 -- @`System.IO.Error.isDoesNotExistError`@ if the attribute does not exist (do
 -- not follow symbolic links).
@@ -298,7 +300,7 @@ lGetXAttr path attr =
 lGetUserXAttr :: FilePath -> Name -> IO Value
 lGetUserXAttr = userXAttr lGetXAttr
 
--- | Get the @'Value'@ of the extended attribute identified by @'Name'@ and
+-- | Retrieve the @'Value'@ of the extended attribute identified by @'Name'@ and
 -- associated with the given file descriptor in the filesystem, or fail with
 -- @`System.IO.Error.isDoesNotExistError`@ if the attribute does not exist.
 fdGetXAttr :: Fd -> Name -> IO Value
