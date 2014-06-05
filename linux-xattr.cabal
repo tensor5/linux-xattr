@@ -1,5 +1,5 @@
 Name:           linux-xattr
-Version:        0.1.0.1
+Version:        0.1.1.0
 Cabal-Version:  >= 1.10
 Build-Type:     Simple
 License:        BSD3
@@ -30,7 +30,7 @@ Source-Repository head
 Source-Repository this
   Type:      git
   Location:  git://github.com/tensor5/linux-xattr.git
-  Tag:       v0.1.0.1
+  Tag:       v0.1.1.0
 
 Library
   Default-Language:    Haskell2010
