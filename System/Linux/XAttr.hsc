@@ -152,9 +152,13 @@ import           Foreign.Ptr           (Ptr, nullPtr)
 import           System.Posix.Types    (CSsize (..), Fd (..))
 
 -- | Name of extended attribute.
+--
+-- /Since: 0.1.1.0/
 type Name = String
 
 -- | Value of extended attribute.
+--
+-- /Since: 0.1.1.0/
 type Value = ByteString
 
 xAttrSet :: Name
@@ -176,6 +180,8 @@ setXAttr path attr value =
     withCString path $ xAttrSet attr value setxattr "setxattr" 0
 
 -- | @'setUserXAttr' "\/some\/path" "foo" "bar" = 'setXAttr' "\/some\/path" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 setUserXAttr :: FilePath -> Name -> Value -> IO ()
 setUserXAttr = userXAttr setXAttr
 
@@ -187,6 +193,8 @@ lSetXAttr path attr value =
     withCString path $ xAttrSet attr value lsetxattr "lsetxattr" 0
 
 -- | @'lSetUserXAttr' "\/some\/link" "foo" "bar" = 'lSetXAttr' "\/some\/link" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 lSetUserXAttr :: FilePath -> Name -> Value -> IO ()
 lSetUserXAttr = userXAttr lSetXAttr
 
@@ -197,6 +205,8 @@ fdSetXAttr (Fd n) attr value =
     xAttrSet attr value fsetxattr "fsetxattr" 0 n
 
 -- | @'fdSetUserXAttr' ('Fd' n) "foo" "bar" = 'fdSetXAttr' ('Fd' n) "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 fdSetUserXAttr :: Fd -> Name -> Value -> IO ()
 fdSetUserXAttr = userXAttr fdSetXAttr
 
@@ -208,6 +218,8 @@ createXAttr path attr value =
     xAttrSet attr value setxattr "setxattr" #{const XATTR_CREATE}
 
 -- | @'createUserXAttr' "\/some\/path" "foo" "bar" = 'createXAttr' "\/some\/path" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 createUserXAttr :: FilePath -> Name -> Value -> IO ()
 createUserXAttr = userXAttr createXAttr
 
@@ -219,6 +231,8 @@ lCreateXAttr path attr value =
     xAttrSet attr value lsetxattr "lsetxattr" #{const XATTR_CREATE}
 
 -- | @'lCreateUserXAttr' "\/some\/link" "foo" "bar" = 'lCreateXAttr' "\/some\/link" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 lCreateUserXAttr :: FilePath -> Name -> Value -> IO ()
 lCreateUserXAttr = userXAttr lCreateXAttr
 
@@ -229,6 +243,8 @@ fdCreateXAttr (Fd n) attr value =
     xAttrSet attr value fsetxattr "fsetxattr" #{const XATTR_CREATE} n
 
 -- | @'fdCreateUserXAttr' ('Fd' n) "foo" "bar" = 'fdCreateXAttr' ('Fd' n) "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 fdCreateUserXAttr :: Fd -> Name -> Value -> IO ()
 fdCreateUserXAttr = userXAttr fdCreateXAttr
 
@@ -240,6 +256,8 @@ replaceXAttr path attr value =
     xAttrSet attr value setxattr "setxattr" #{const XATTR_REPLACE}
 
 -- | @'replaceUserXAttr' "\/some\/path" "foo" "bar" = 'replaceXAttr' "\/some\/path" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 replaceUserXAttr :: FilePath -> Name -> Value -> IO ()
 replaceUserXAttr = userXAttr replaceXAttr
 
@@ -251,6 +269,8 @@ lReplaceXAttr path attr value =
     xAttrSet attr value lsetxattr "lsetxattr" #{const XATTR_REPLACE}
 
 -- | @'lReplaceUserXAttr' "\/some\/link" "foo" "bar" = 'lReplaceXAttr' "\/some\/link" "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 lReplaceUserXAttr :: FilePath -> Name -> Value -> IO ()
 lReplaceUserXAttr = userXAttr lReplaceXAttr
 
@@ -261,6 +281,8 @@ fdReplaceXAttr (Fd n) attr value =
     xAttrSet attr value fsetxattr "fsetxattr" #{const XATTR_REPLACE} n
 
 -- | @'fdReplaceUserXAttr' ('Fd' n) "foo" "bar" = 'fdReplaceXAttr' ('Fd' n) "user.foo" "bar"@
+--
+-- /Since: 0.1.1.0/
 fdReplaceUserXAttr :: Fd -> Name -> Value -> IO ()
 fdReplaceUserXAttr = userXAttr fdReplaceXAttr
 
@@ -285,6 +307,8 @@ getXAttr path attr =
     withCString path $ xAttrGet attr getxattr "getxattr"
 
 -- | @'getUserXAttr' "\/some\/path" "foo" = 'getXAttr' "\/some\/path" "user.foo"@
+--
+-- /Since: 0.1.1.0/
 getUserXAttr :: FilePath -> Name -> IO Value
 getUserXAttr = userXAttr getXAttr
 
@@ -297,6 +321,8 @@ lGetXAttr path attr =
     withCString path $ xAttrGet attr lgetxattr "lgetxattr"
 
 -- | @'lGetUserXAttr' "\/some\/link" "foo" = 'lGetXAttr' "\/some\/link" "user.foo"@
+--
+-- /Since: 0.1.1.0/
 lGetUserXAttr :: FilePath -> Name -> IO Value
 lGetUserXAttr = userXAttr lGetXAttr
 
@@ -308,6 +334,8 @@ fdGetXAttr (Fd n) attr =
     xAttrGet attr fgetxattr "fgetxattr" n
 
 -- | @'fdGetUserXAttr' ('Fd' n) "foo" = 'fdGetXAttr' ('Fd' n) "user.foo"@
+--
+-- /Since: 0.1.1.0/
 fdGetUserXAttr :: Fd -> Name -> IO Value
 fdGetUserXAttr = userXAttr fdGetXAttr
 
@@ -338,6 +366,8 @@ listXAttr path = withCString path $ xAttrList listxattr "listxattr"
 -- >>> 'listUserXAttr' "\/some\/path"
 -- ["foo","bar"]
 -- @
+--
+-- /Since: 0.1.1.0/
 listUserXAttr :: FilePath -> IO [Name]
 listUserXAttr = userXAttrList listXAttr
 
@@ -354,6 +384,8 @@ lListXAttr path =
 -- >>> 'lListUserXAttr' "\/some\/link"
 -- ["foo","bar"]
 -- @
+--
+-- /Since: 0.1.1.0/
 lListUserXAttr :: FilePath -> IO [Name]
 lListUserXAttr = userXAttrList lListXAttr
 
@@ -370,6 +402,8 @@ fdListXAttr (Fd n) =
 -- >>> 'fdListUserXAttr' ('Fd' n)
 -- ["foo","bar"]
 -- @
+--
+-- /Since: 0.1.1.0/
 fdListUserXAttr :: Fd -> IO [Name]
 fdListUserXAttr = userXAttrList fdListXAttr
 
@@ -386,6 +420,8 @@ removeXAttr path attr =
     withCString path $ xAttrRemove attr removexattr "removexattr"
 
 -- | @'removeUserXAttr' "\/some\/path" "foo" = 'removeXAttr' "\/some\/path" "user.foo"@
+--
+-- /Since: 0.1.1.0/
 removeUserXAttr :: FilePath -> Name -> IO ()
 removeUserXAttr = userXAttr removeXAttr
 
@@ -398,6 +434,8 @@ lRemoveXAttr path attr =
     withCString path $ xAttrRemove attr lremovexattr "lremovexattr"
 
 -- | @'lRemoveUserXAttr' "\/some\/link" "foo" = 'lRemoveXAttr' "\/some\/link" "user.foo"@
+--
+-- /Since: 0.1.1.0/
 lRemoveUserXAttr :: FilePath -> Name -> IO ()
 lRemoveUserXAttr = userXAttr lRemoveXAttr
 
@@ -409,6 +447,8 @@ fdRemoveXAttr (Fd n) attr =
     xAttrRemove attr fremovexattr "fremovexattr" n
 
 -- | @'fdRemoveUserXAttr' ('Fd' n) "foo" = 'fdRemoveXAttr' ('Fd' n) "user.foo"@
+--
+-- /Since: 0.1.1.0/
 fdRemoveUserXAttr :: Fd -> Name -> IO ()
 fdRemoveUserXAttr = userXAttr fdRemoveXAttr
 
