@@ -36,6 +36,6 @@ Library
   Default-Language:    Haskell2010
   Default-Extensions:  Safe
   Build-Depends:       base == 4.*,
-                       bytestring == 0.10.*
+                       bytestring >= 0.10
   Ghc-Options:         -Wall
   Exposed-Modules:     System.Linux.XAttr
